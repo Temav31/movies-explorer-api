@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
-// const { pattern } = require('../utils/constants');
+// валидация
+const { validationUpdateProfile } = require('../utils/validation/users');
 //  импорт обработчиков
 const {
   UpdateProfile,
@@ -8,15 +8,6 @@ const {
 } = require('../controllers/user');
 // обработка путей
 router.get('/me', getCurrentUser);
-router.patch(
-  '/me',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().required().min(2).max(30),
-      email: Joi.string().required().email(),
-    }),
-  }),
-  UpdateProfile,
-);
+router.patch('/me', validationUpdateProfile(), UpdateProfile);
 // экспорт роута
 module.exports = router;

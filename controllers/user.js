@@ -6,6 +6,14 @@ const FoundError = require('../utils/errors/FoundError');
 const ConflictError = require('../utils/errors/ConflictError');
 const DataError = require('../utils/errors/DataError');
 const ServerError = require('../utils/errors/ServerError');
+// текста ошибок
+const {
+  ERROR_MESSAGE_NOT_FOUND,
+  ERROR_MESSAGE_USER_DATA,
+  ERROR_MESSAGE_DATA,
+  ERROR_MESSAGE_FOUND_USER,
+  ERROR_MESSAGE_USER,
+} = require('../utils/constants');
 // регистрация
 module.exports.createUser = (req, res, next) => {
   const {
@@ -32,9 +40,9 @@ module.exports.createUser = (req, res, next) => {
         })
         .catch((err) => {
           if (err.code === 11000) {
-            next(new ConflictError('Такого пользователя не существует'));
+            next(new ConflictError(ERROR_MESSAGE_USER));
           } else if (err.name === 'ValidationError') {
-            next(new DataError('Переданы некоректные данные'));
+            next(new DataError(ERROR_MESSAGE_DATA));
           } else {
             next(new ServerError());
           }
@@ -63,15 +71,15 @@ module.exports.login = (req, res, next) => {
 // получить текущего пользователя
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(new Error('Not Found'))
+    .orFail(new Error(ERROR_MESSAGE_NOT_FOUND))
     .then((user) => {
       res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new DataError('Переданы некоректные данные'));
-      } else if (err.message === 'Not Found') {
-        next(new FoundError('Пользователь не найден'));
+        next(new DataError(ERROR_MESSAGE_DATA));
+      } else if (err.message === ERROR_MESSAGE_NOT_FOUND) {
+        next(new FoundError(ERROR_MESSAGE_FOUND_USER));
       } else {
         next(new ServerError());
       }
@@ -88,17 +96,17 @@ module.exports.UpdateProfile = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(new Error('Not Found'))
+    .orFail(new Error(ERROR_MESSAGE_NOT_FOUND))
     .then((user) => {
       res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new FoundError('Некоректный идентификатор'));
+        next(new FoundError(ERROR_MESSAGE_USER_DATA));
       } else if (err.name === 'ValidationError') {
-        next(new DataError('Переданы некоректные данные'));
-      } else if (err.message === 'Not Found') {
-        next(new DataError('Пользователь не найден'));
+        next(new DataError(ERROR_MESSAGE_DATA));
+      } else if (err.message === ERROR_MESSAGE_NOT_FOUND) {
+        next(new DataError(ERROR_MESSAGE_FOUND_USER));
       } else {
         next(new ServerError());
       }
