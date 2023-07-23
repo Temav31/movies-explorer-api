@@ -4,7 +4,7 @@ const FoundError = require('../utils/errors/FoundError');
 // const { pattern } = require('../utils/constant');
 // импорт из файла
 const user = require('./user');
-// const card = require('./cards');
+const movie = require('./movie');
 const { createUser, login } = require('../controllers/user');
 const auth = require('../middlwares/auth');
 // регистрация
@@ -33,7 +33,7 @@ router.post(
 router.use(auth);
 // обозначение роутов
 router.use('/users', user);
-// router.use('/cards', card);
+router.use('/movies', movie);
 router.use(errors());
 // обработка другого пути
 router.use('/*', (req, res, next) => {
