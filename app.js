@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const router = require('./routes/index');
 const errorHandler = require('./middlwares/error');
 const { requestLogger, errorLogger } = require('./middlwares/logger');
+const { DATABASE_ADDRESS } = require('./utils/constants');
 // константы
 const app = express();
 app.use(express.json());
@@ -21,9 +22,10 @@ app.use(cors({
 }));
 const { PORT = 3000 } = process.env;
 // // подключаемся к серверу mongo
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
-  useNewUrlParser: true,
-});
+// mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+//   useNewUrlParser: true,
+// });
+mongoose.connect(DATABASE_ADDRESS);
 // роуты
 app.use(cookieParser());
 app.use(requestLogger);

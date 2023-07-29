@@ -8,12 +8,14 @@ const { ERROR_MESSAGE_PAGE } = require('../utils/constants');
 // импорт из файла
 const user = require('./user');
 const movie = require('./movie');
-const { createUser, login } = require('../controllers/user');
+const { createUser, login, logout } = require('../controllers/user');
 const auth = require('../middlwares/auth');
 // регистрация
 router.post('/signup', validationCreateUser(), createUser);
 // аутенфикация
 router.post('/signin', validationLogin(), login);
+// выход
+router.post('/signout', logout);
 router.use(auth);
 // обозначение роутов
 router.use('/users', user);

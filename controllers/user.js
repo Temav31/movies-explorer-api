@@ -6,6 +6,8 @@ const FoundError = require('../utils/errors/FoundError');
 const ConflictError = require('../utils/errors/ConflictError');
 const DataError = require('../utils/errors/DataError');
 const ServerError = require('../utils/errors/ServerError');
+// токены
+const { NODE_ENV, JWT_SECRET } = process.env;
 // текста ошибок
 const {
   ERROR_MESSAGE_NOT_FOUND,
@@ -13,6 +15,7 @@ const {
   ERROR_MESSAGE_DATA,
   ERROR_MESSAGE_FOUND_USER,
   ERROR_MESSAGE_USER,
+  EXIT,
 } = require('../utils/constants');
 // регистрация
 module.exports.createUser = (req, res, next) => {
@@ -57,7 +60,8 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jsonWebToken.sign(
         { _id: user._id },
-        'SECRET',
+        // 'SECRET',
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' },
       );
       res.cookie('token', token, {
@@ -67,6 +71,15 @@ module.exports.login = (req, res, next) => {
         .send({ token });
     })
     .catch(next);
+};
+// выход из аккаунта
+module.exports.logout = (req, res, next) => {
+  res
+    .clearCookie('authToken')
+    .send({
+      message: EXIT,
+    });
+  return next();
 };
 // получить текущего пользователя
 module.exports.getCurrentUser = (req, res, next) => {
@@ -98,7 +111,7 @@ module.exports.UpdateProfile = (req, res, next) => {
   )
     .orFail(new Error(ERROR_MESSAGE_NOT_FOUND))
     .then((user) => {
-      res.status(200).send(user);
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
