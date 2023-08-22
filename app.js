@@ -22,7 +22,7 @@ app.use(cors({
     'http://localhost:3001',
   ],
 }));
-const { PORT = 3000 } = process.env;
+const { PORT = 80 } = process.env;
 // // подключаемся к серверу mongo
 mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
   useNewUrlParser: true,
