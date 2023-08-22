@@ -18,14 +18,16 @@ app.use(cors({
     'http://work.tema.nomoredomains.work',
     'https://localhost:3000',
     'http://localhost:3000',
+    'https://localhost:3001',
+    'http://localhost:3001',
   ],
 }));
 const { PORT = 3000 } = process.env;
 // // подключаемся к серверу mongo
-// mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
-//   useNewUrlParser: true,
-// });
-mongoose.connect(DATABASE_ADDRESS);
+mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+  useNewUrlParser: true,
+});
+// mongoose.connect(DATABASE_ADDRESS);
 // роуты
 app.use(cookieParser());
 app.use(requestLogger);

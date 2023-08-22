@@ -19,6 +19,7 @@ const {
 } = require('../utils/constants');
 // регистрация
 module.exports.createUser = (req, res, next) => {
+  console.log(req.body);
   const {
     name,
     email,
