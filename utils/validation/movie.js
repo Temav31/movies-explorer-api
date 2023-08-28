@@ -21,7 +21,7 @@ function validationMovieCreate() {
 // удаление фильма
 function validationMovieDelete() {
   return celebrate({
-    body: Joi.object().keys({
+    params: Joi.object().keys({
       movieId: Joi.string().length(24).required().hex(),
     }),
   });

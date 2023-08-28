@@ -87,7 +87,8 @@ module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(new Error(ERROR_MESSAGE_NOT_FOUND))
     .then((user) => {
-      res.send({ data: user });
+      res.send(user);
+      // res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

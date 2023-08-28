@@ -30,6 +30,7 @@ module.exports.createMovie = (req, res, next) => {
     image,
     trailerLink,
     thumbnail,
+    movieId,
     nameRU,
     nameEN,
   } = req.body;
@@ -43,6 +44,7 @@ module.exports.createMovie = (req, res, next) => {
     image,
     trailerLink,
     thumbnail,
+    movieId,
     nameRU,
     nameEN,
     owner,
@@ -59,6 +61,8 @@ module.exports.createMovie = (req, res, next) => {
 // удаление карточки
 module.exports.deleteMovie = (req, res, next) => {
   // const { movieId } = req.params;
+  console.log("delete");
+  console.log(req.params.movieId);
   Movie.findById(req.params.movieId)
     .orFail(new Error(ERROR_MESSAGE_NOT_FOUND))
     .then((movie) => {
