@@ -35,6 +35,7 @@ module.exports.createUser = (req, res, next) => {
         password: hashedPassword,
       })
         .then(() => {
+          console.log("регистрация");
           res.send({
             data: {
               name,
@@ -116,12 +117,16 @@ module.exports.UpdateProfile = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
+      console.log(err)
       if (err.name === 'CastError') {
         next(new FoundError(ERROR_MESSAGE_USER_DATA));
       } else if (err.name === 'ValidationError') {
         next(new DataError(ERROR_MESSAGE_DATA));
       } else if (err.message === ERROR_MESSAGE_NOT_FOUND) {
         next(new DataError(ERROR_MESSAGE_FOUND_USER));
+      } else if (err.code === 11000) {
+        console.log("hi")
+        next(new ConflictError(ERROR_MESSAGE_USER));
       } else {
         next(new ServerError());
       }

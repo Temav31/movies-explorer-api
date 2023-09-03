@@ -20,6 +20,7 @@ module.exports.getMovie = (req, res, next) => {
 };
 // создать карточку
 module.exports.createMovie = (req, res, next) => {
+  // console.log(req.body);
   const owner = req.user._id;
   const {
     country,
@@ -56,6 +57,8 @@ module.exports.createMovie = (req, res, next) => {
       } else {
         next(new ServerError());
       }
+      console.log("efrdbsrfgbgfbnr");
+
     });
 };
 // удаление карточки
